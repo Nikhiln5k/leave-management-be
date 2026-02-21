@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 app.use(compression());
 
-const port: number = Number(process.env.MASTER_PORT) || 5101;
+const port: number = Number(process.env.EMPLOYEE_PORT) || 5102;
 app.listen(port, () => {
-  console.info(`Master is started at port ${port}`);
+  console.info(`Employee is started at port ${port}`);
 });
