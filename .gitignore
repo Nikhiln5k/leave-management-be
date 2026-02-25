@@ -4,3 +4,4 @@ node_modules/
 .npm
 # dotenv environment variables file
 .env
+dist/
