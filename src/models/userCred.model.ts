@@ -1,7 +1,6 @@
 import { CreateUserCred, Result } from "../common/interfaces";
 import db from "../db";
 
-
 const create = async (connection: any, details: CreateUserCred) => {
   let result: Result;
   try {
