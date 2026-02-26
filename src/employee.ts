@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import compression from "compression";
 import cors from "cors";
 import db from "./db";
+import routes from "./routes/employee"
+import common from "./common";
 
 dotenv.config();
 
@@ -25,3 +27,10 @@ app.use(cors());
 app.use(compression());
 
 startServer();
+app.use("/api", routes);
+
+app.use((req, res) => {
+  res
+    .status(common.notFound)
+    .send("API Request Not Valid. Please check Again.");
+});
