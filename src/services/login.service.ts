@@ -26,7 +26,7 @@ export const loginService = async (details: LogInEmp) => {
 
   return (result = {
     success: true,
+    data: { token, user: user.data },
     message: "login success",
-    data: { token },
   });
 };

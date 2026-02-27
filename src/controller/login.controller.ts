@@ -5,12 +5,14 @@ import { LogInEmp } from "../common/interfaces/login.interface";
 
 export const loginController = async (req: Request, res: Response) => {
   const details: LogInEmp = req.body;
-  const token = await loginService(details);
-  if (token.message === "invalid password") {
-    return responseHandler.badReqRes(res, token.message, token.data);
-  } else if (token.success) {
-    return responseHandler.successRes(res, token.message, token.data);
+
+  const result = await loginService(details);
+
+  if (result.message === "invalid password") {
+    return responseHandler.badReqRes(res, result);
+  } else if (result.success) {
+    return responseHandler.successRes(res, result.data, result.message);
   } else {
-    return responseHandler.errorRes(res, token.message, token.data);
+    return responseHandler.errorRes(res, result.error, result.message);
   }
 };
