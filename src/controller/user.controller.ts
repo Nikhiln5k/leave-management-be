@@ -8,9 +8,8 @@ const createUser = async (req: Request, res: Response) => {
   const details: CreateUser = req.body;
   details.apiName = `${req.method} ${req.originalUrl}`;
   const result: any = await userService.createUser(details);
-  console.log(result, "cont")
   if (result.success)
-    return responseHandler.createRes(res, result, "User created successfully");
+    return responseHandler.createRes(res, [], result.message);
   else if (result.message === "User already exists")
     return responseHandler.badReqRes(res, "User already exists");
   else return responseHandler.errorRes(res, result.message || "Failed to create user");
