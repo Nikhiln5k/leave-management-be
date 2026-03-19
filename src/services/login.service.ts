@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { findOne } from "../models/userCred.model";
 import bcrypt from "bcrypt";
 import { Result } from "../common/interfaces";
-import { LogInEmp } from "../common/interfaces/login.interface";
+import { LogInEmp, masterLogIn } from "../common/interfaces/login.interface";
 import db from "../db";
 
 export const loginService = async (details: LogInEmp) => {
@@ -29,4 +29,69 @@ export const loginService = async (details: LogInEmp) => {
     data: { token, user: user.data },
     message: "login success",
   });
+};
+
+export const masterLoginService = async (details: masterLogIn) => {
+  const connection = await db.getConnection();
+  try {
+    const userRes = await findOne(connection, undefined, details.username);
+    if (!userRes.success || !userRes.data?.length) {
+      return {
+        success: false,
+        message: "User not found",
+        data: [],
+      };
+    }
+    const user = userRes.data[0];
+    if (!user.password) {
+      return {
+        success: false,
+        message: "Password not hashed. Please reset user password.",
+        data: [],
+      };
+    }
+
+    // 3. Compare password
+    const isMatch = await bcrypt.compare(
+      details.password?.trim(),
+      user.password,
+    );
+    if (!isMatch) {
+      return {
+        success: false,
+        message: "Invalid Password",
+        data: [],
+      };
+    }
+
+    const token = jwt.sign(
+      {
+        id: user.id,
+        role: user.role,
+      },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "1d" },
+    );
+    return {
+      success: true,
+      message: "LoginSuccessful",
+      data: {
+        token,
+        user: {
+          id: user.id,
+          username: user.username,
+          role: user.role,
+        },
+      },
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error,
+      message: error.message || "Something Went Wrong",
+      data: [],
+    };
+  } finally {
+    connection.release();
+  }
 };
