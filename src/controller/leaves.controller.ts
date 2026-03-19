@@ -17,4 +17,29 @@ const createLeaves = async (req: Request, res: Response) => {
     );
 };
 
-export { createLeaves };
+const getLeaves = async (req: Request, res: Response) => {
+  try {
+    const filters = {
+      userId: req.query.userId ? Number(req.query.userId) : undefined,
+    };
+
+    const result: any = await leavesService.getLeaves(filters);
+
+    if (result.success) {
+      return responseHandler.createRes(
+        res,
+        result,
+        "Leave list get successfully"
+      );
+    } else {
+      return responseHandler.errorRes(
+        res,
+        result.message || "Failed to get leave list"
+      );
+    }
+  } catch (error: any) {
+    return responseHandler.errorRes(res, error.message);
+  }
+};
+
+export { createLeaves, getLeaves };

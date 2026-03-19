@@ -50,4 +50,24 @@ const createLeave = async (details: CreateLeaves) => {
   return result;
 };
 
-export { createLeave };
+const getLeaves = async (filters: { userId?: number }) => {
+  const connection = await db.getConnection();
+  let result: Result;
+
+  try {
+    const leaveRes = await leaveModel.findLeave(connection, filters);
+    result = leaveRes;
+  } catch (err: any) {
+    console.error("Error in getLeaves service", err);
+
+    result = {
+      success: false,
+      message: "Failed to fetch leaves",
+      error: err.message,
+    };
+  }
+
+  return result;
+};
+
+export { createLeave, getLeaves };

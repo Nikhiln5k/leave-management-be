@@ -75,7 +75,7 @@ const findLeave = async (
 
     result = {
       success: true,
-      message: "Leave fetched successfully",
+      message: "Leave get successfully",
       data: res,
     };
   } catch (err: any) {
@@ -83,7 +83,7 @@ const findLeave = async (
 
     result = {
       success: false,
-      message: "Failed to fetch leave",
+      message: "Failed to get leave",
       error: err.message,
     };
   } finally {
