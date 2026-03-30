@@ -3,7 +3,7 @@ import { loginService, masterLoginService } from "../services/login.service";
 import responseHandler from "../common/helpers/responseHandler";
 import { LogInEmp, masterLogIn } from "../common/interfaces/login.interface";
 
-export const loginController:any = async (req: Request, res: Response) => {
+export const loginController = async (req: Request, res: Response) => {
   const details: LogInEmp = req.body;
 
   const result = await loginService(details);

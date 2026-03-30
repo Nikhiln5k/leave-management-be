@@ -34,7 +34,7 @@ const findOne = async (
 ) => {
   let result: Result;
   try {
-    let sql = `SELECT * FROM user_credentials WHERE isDelete = 0`;
+    let sql = `SELECT id, username, role FROM user_credentials WHERE isDelete = 0`;
     const params: any[] = [username];
     if (id) {
       sql += ` AND id = ?`;
