@@ -7,7 +7,7 @@ const createLeaves = async (req: Request, res: Response) => {
   const details: CreateLeaves = req.body;
   details.apiName = `${req.method} ${req.originalUrl}`;
   const result: any = await leavesService.createLeave(details);
-  console.log(result, "result");
+
   if (result.success)
     return responseHandler.createRes(res, result, "Leave requst created successfully");
   else
