@@ -4,7 +4,8 @@ import responseHandler from "../common/helpers/responseHandler";
 
 const getDashDedails = async (req: Request, res: Response) => {
   try {
-    const result: any = await dashDelService.getDashDedails();
+    const apiName = `${req.method} ${req.originalUrl}`;
+    const result: any = await dashDelService.getDashDedails({apiName});
 
     if (result.success) {
       return responseHandler.successRes(
