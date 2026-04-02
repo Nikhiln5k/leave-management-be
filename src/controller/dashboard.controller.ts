@@ -10,12 +10,12 @@ const getDashDedails = async (req: Request, res: Response) => {
       return responseHandler.successRes(
         res,
         result.data,
-        "Leave list get successfully"
+        result.message || "Dashboard fetched successfully"
       );
     } else {
       return responseHandler.errorRes(
         res,
-        result.message || "Failed to get leave list"
+        result.message || "Failed to get dashboard details"
       );
     }
   } catch (error: any) {

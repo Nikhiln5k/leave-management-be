@@ -16,26 +16,30 @@ const findDashList = async (connection: any) => {
     ON u.userId = uc.id
     WHERE uc.role = 'EMPLOYEE'
     AND u.isDelete = 0 
-    AND uc.isDelete = 0;`
-    let sql3 = `Select count(*) AS count FROM leave_requests where isDelete = 0;`;
-    let sql4 = `Select count(*) AS count FROM leave_requests where status = 'PENDING' AND isDelete = 0;`;
-    let sql5 = `Select count(*) AS count FROM leave_requests where status = 'APPROVED' AND isDelete = 0;`;
+    AND uc.isDelete = 0;`;
+    // let sql3 = `Select count(*) AS count FROM leave_requests where isDelete = 0;`;
+    // let sql4 = `Select count(*) AS count FROM leave_requests where status = 'PENDING' AND isDelete = 0;`;
+    // let sql5 = `Select count(*) AS count FROM leave_requests where status = 'APPROVED' AND isDelete = 0;`;
+    let sql3 = `SELECT COUNT(*) AS total,
+     SUM(CASE WHEN status = 'PENDING' THEN 1 ELSE 0 END) AS pending,
+     SUM(CASE WHEN status = 'APPROVED' THEN 1 ELSE 0 END) AS approved
+     FROM leave_requests WHERE isDelete = 0`;
     const params: any[] = [];
-    const [res] = await connection.query(sql1, params);
-    const [res1] = await connection.query(sql2, params);
-    const [res2] = await connection.query(sql3, params);
-    const [res3] = await connection.query(sql4, params);
-    const [res4] = await connection.query(sql5);
-    let finalData:any = {};
+    const [[res], [res1], [res2]] = await Promise.all([
+      connection.query(sql1, params),
+      connection.query(sql2, params),
+      connection.query(sql3, params),
+    ]);
+    let finalData: any = {};
     finalData.totalEmpCount = res1[0].count;
-    finalData.totalLeaveRequests = res2[0].count;
-    finalData.pendingLeaveRequest = res3[0].count;
-    finalData.approvedLeaveRequest = res4[0].count;
-    finalData.leaves = res; 
-    
+    finalData.totalLeaveRequests = res2[0].total;
+    finalData.pendingLeaveRequest = res2[0].pending;
+    finalData.approvedLeaveRequest = res2[0].approved;
+    finalData.leaves = res;
+
     result = {
       success: true,
-      message: "Leave get successfully",
+      message: "Dashboard fetched successfully",
       data: finalData,
     };
   } catch (err: any) {

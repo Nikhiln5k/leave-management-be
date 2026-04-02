@@ -6,8 +6,8 @@ import responseHandler from "../common/helpers/responseHandler";
 const createLeaves = async (req: Request, res: Response) => {
   const details: CreateLeaves = req.body;
   details.apiName = `${req.method} ${req.originalUrl}`;
+  
   const result: any = await leavesService.createLeave(details);
-
   if (result.success)
     return responseHandler.createRes(res, result, "Leave requst created successfully");
   else
@@ -28,7 +28,7 @@ const getLeaves = async (req: Request, res: Response) => {
     if (result.success) {
       return responseHandler.createRes(
         res,
-        result,
+        result.data,
         "Leave list get successfully"
       );
     } else {

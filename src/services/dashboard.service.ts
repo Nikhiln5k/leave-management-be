@@ -1,6 +1,7 @@
 import { Result } from "../common/interfaces";
 import db from "../db";
 import * as findDashboard from "../models/dashboard.model";
+
 const getDashDedails = async () => {
   const connection = await db.getConnection();
   let result: Result;
