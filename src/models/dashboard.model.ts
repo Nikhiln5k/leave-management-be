@@ -1,6 +1,7 @@
 import { Result } from "../common/interfaces";
+import { LoggerException } from "../services/loggerException.service";
 
-const findDashList = async (connection: any) => {
+const findDashList = async (connection: any, data: any) => {
   let result: Result;
 
   try {
@@ -25,25 +26,24 @@ const findDashList = async (connection: any) => {
      SUM(CASE WHEN status = 'APPROVED' THEN 1 ELSE 0 END) AS approved
      FROM leave_requests WHERE isDelete = 0`;
     const params: any[] = [];
-    const [[res], [res1], [res2]] = await Promise.all([
+    const promise = await Promise.all([
       connection.query(sql1, params),
       connection.query(sql2, params),
       connection.query(sql3, params),
     ]);
-    let finalData: any = {};
-    finalData.totalEmpCount = res1[0].count;
-    finalData.totalLeaveRequests = res2[0].total;
-    finalData.pendingLeaveRequest = res2[0].pending;
-    finalData.approvedLeaveRequest = res2[0].approved;
-    finalData.leaves = res;
 
     result = {
       success: true,
       message: "Dashboard fetched successfully",
-      data: finalData,
+      data: promise,
     };
   } catch (err: any) {
     console.error("Error in finding leave", err);
+    await LoggerException.insert({
+      apiName: data?.apiName || "Unknown API",
+      data: null,
+      exception: err.message || String(err),
+    });
 
     result = {
       success: false,
