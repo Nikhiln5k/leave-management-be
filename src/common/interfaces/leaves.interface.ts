@@ -7,4 +7,5 @@ export interface CreateLeaves {
     status: "PENDING" | "APPROVED" | "REJECTED";
     managerComment: string;
     apiName?: string;
+    doc?: string;
 }
