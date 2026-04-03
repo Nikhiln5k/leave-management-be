@@ -5,6 +5,6 @@ export interface CreateUser {
     email: string;
     username: string;
     password: string;
-    role: "ADMIN" | "EMPLOYEE" | "MANAGER";
+    roleId: number;
     apiName?: string;
 }

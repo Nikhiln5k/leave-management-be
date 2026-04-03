@@ -4,11 +4,11 @@ import db from "../db";
 const create = async (connection: any, details: CreateUserCred) => {
   let result: Result;
   try {
-    const { username, password, role } = details;
+    const { username, password, roleId } = details;
     await connection.beginTransaction();
     const [res] = await connection.query(
-      `INSERT INTO user_credentials (username, password, role) VALUES (?, ?, ?)`,
-      [username, password, role],
+      `INSERT INTO user_credentials (username, password, roleId) VALUES (?, ?, ?)`,
+      [username, password, roleId],
     );
     await connection.commit();
     result = { success: true, message: "User created successfully", data: res };
@@ -34,16 +34,18 @@ const findOne = async (
 ) => {
   let result: Result;
   try {
-    let sql = `SELECT id, username, role FROM user_credentials WHERE isDelete = 0`;
+    // let sql = `SELECT id, username, roleId FROM user_credentials WHERE isDelete = 0`;
+    let sql = `SELECT uc.id, uc.username, uc.roleId, r.roleName FROM user_credentials uc
+     INNER JOIN role r ON uc.roleId = r.id WHERE uc.isDelete = 0`;
     const params: any[] = [username];
     if (id) {
-      sql += ` AND id = ?`;
+      sql += ` AND uc.id = ?`;
       params.push(id);
     } else if (email) {
-      sql += ` AND email = ?`;
+      sql += ` AND uc.email = ?`;
       params.push(email);
     } else if (username) {
-      sql += ` AND username = ?`;
+      sql += ` AND uc.username = ?`;
       params.push(username);
     }
     const [res] = await connection.query(sql, params);
