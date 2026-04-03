@@ -14,12 +14,13 @@ const create = async (connection: any, details: any) => {
       reason,
       status = "PENDING",
       managerComment = "",
+      doc = null,
     } = details;
 
     const [res] = await connection.query(
       `INSERT INTO leave_requests 
-      (userId, startDate, endDate, type, reason, status, managerComment)
-      VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      (userId, startDate, endDate, type, reason, status, managerComment, doc)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         userId,
         startDate,
@@ -28,6 +29,7 @@ const create = async (connection: any, details: any) => {
         reason,
         status,
         managerComment,
+        doc,
       ]
     );
 

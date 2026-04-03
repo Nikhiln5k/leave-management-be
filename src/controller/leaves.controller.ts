@@ -9,7 +9,11 @@ const createLeaves = async (req: Request, res: Response) => {
   
   const result: any = await leavesService.createLeave(details);
   if (result.success)
-    return responseHandler.createRes(res, result, "Leave requst created successfully");
+    return responseHandler.createRes(
+      res,
+      result,
+      "Leave requst created successfully",
+    );
   else
     return responseHandler.errorRes(
       res,
@@ -34,7 +38,7 @@ const getLeaves = async (req: Request, res: Response) => {
     } else {
       return responseHandler.errorRes(
         res,
-        result.message || "Failed to get leave list"
+        result.message || "Failed to get leave list",
       );
     }
   } catch (error: any) {
