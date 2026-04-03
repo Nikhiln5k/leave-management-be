@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { Result } from "../common/interfaces";
 import { LogInEmp, masterLogIn } from "../common/interfaces/login.interface";
 import db from "../db";
+import { fetchMenuPermissions } from "./menuPermission.service";
 
 export const loginService = async (details: LogInEmp) => {
   const connection = await db.getConnection();
@@ -17,9 +18,10 @@ export const loginService = async (details: LogInEmp) => {
   //   if (!isMatch) {
   //    return result = {success: false, message: 'invalid password',data:[]};
   //   }
-
+  const roleId = user.data[0].roleId;
+  const menuPermissions = await fetchMenuPermissions(roleId);
   const token = jwt.sign(
-    { id: user.data[0].id, role: user.data[0].role },
+    { id: user.data[0].id, role: user.data[0].roleName, menus: menuPermissions },
     process.env.JWT_SECRET!,
     { expiresIn: "1d" },
   );

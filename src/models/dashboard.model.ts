@@ -15,9 +15,10 @@ const findDashList = async (connection: any, data: any) => {
     FROM users AS u
     INNER JOIN user_credentials AS uc  
     ON u.userId = uc.id
-    WHERE uc.role = 'EMPLOYEE'
+    INNER JOIN role r ON uc.roleId = r.id
+    WHERE r.roleName = 'EMPLOYEE'
     AND u.isDelete = 0 
-    AND uc.isDelete = 0;`;
+    AND uc.isDelete = 0`;
     // let sql3 = `Select count(*) AS count FROM leave_requests where isDelete = 0;`;
     // let sql4 = `Select count(*) AS count FROM leave_requests where status = 'PENDING' AND isDelete = 0;`;
     // let sql5 = `Select count(*) AS count FROM leave_requests where status = 'APPROVED' AND isDelete = 0;`;

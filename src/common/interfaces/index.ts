@@ -8,5 +8,5 @@ export interface Result {
 export interface CreateUserCred {
     username: string;
     password: string;
-    role: "ADMIN" | "EMPLOYEE" | "MANAGER";
+    roleId: number;
 }
