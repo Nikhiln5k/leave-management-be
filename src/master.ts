@@ -34,6 +34,9 @@ app.use(compression());
 startServer();
 
 app.use("/api", routes);
+app.get("/ping", (req, res) => {
+  res.status(common.success).send("running..");
+});
 
 app.use((req, res) => {
   res
