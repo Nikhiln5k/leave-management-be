@@ -5,19 +5,24 @@ import responseHandler from "../common/helpers/responseHandler";
 
 const createLeaves = async (req: Request, res: Response) => {
   const details: CreateLeaves = req.body;
+  const file = req.file as Express.Multer.File | undefined;
+
+  if (file) {
+    details.doc = file.path;
+  }
   details.apiName = `${req.method} ${req.originalUrl}`;
   
   const result: any = await leavesService.createLeave(details);
   if (result.success)
     return responseHandler.createRes(
       res,
-      result,
-      "Leave requst created successfully",
+      [],
+      result.message ?? "Leave applied successfully",
     );
   else
     return responseHandler.errorRes(
       res,
-      result.message || "Failed to create leave requst",
+      result.message || "Failed to create leave request",
     );
 };
 

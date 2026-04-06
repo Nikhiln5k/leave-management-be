@@ -30,11 +30,8 @@ const createLeave = async (details: CreateLeaves) => {
       }
     }
 
-    // ⚠️ IMPORTANT: get NEW connection (because old one released in model)
-    const newConnection = await db.getConnection();
-
     // ✅ 2. Create leave
-    const leaveRes = await leaveModel.create(newConnection, details);
+    const leaveRes = await leaveModel.create(connection, details);
 
     result = leaveRes;
   } catch (err: any) {
@@ -45,6 +42,8 @@ const createLeave = async (details: CreateLeaves) => {
       message: "Failed to create leave",
       error: err.message,
     };
+  } finally {
+    connection.release();
   }
 
   return result;
