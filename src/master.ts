@@ -12,14 +12,17 @@ const app: Application = express();
 app.use(express.json());
 
 // Call init synchronously before anything else
-db.init().catch((err) => {
-  console.error("Database initialization failed:", err);
-  process.exit(1);
-});
+// db.init().catch((err) => {
+//   console.error("Database initialization failed:", err);
+//   process.exit(1);
+// });
 async function startServer() {
   const port: number = Number(process.env.MASTER_PORT) || 5101;
   try {
-    await db.init();
+    await db.init().catch((err) => {
+      console.error("Database initialization failed:", err);
+      process.exit(1);
+    });
     app.listen(port, () => {
       console.info(`Master is started at port ${port}`);
     });
