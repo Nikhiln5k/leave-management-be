@@ -14,12 +14,12 @@ const create = async (connection: any, details: any) => {
       reason,
       status = "PENDING",
       managerComment = "",
-      doc = null,
+      doc,
     } = details;
 
     const [res] = await connection.query(
       `INSERT INTO leave_requests 
-      (userId, startDate, endDate, type, reason, status, managerComment, doc)
+      (userId, startDate, endDate, type, reason, status, managerComment, document)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         userId,
@@ -37,7 +37,7 @@ const create = async (connection: any, details: any) => {
 
     result = {
       success: true,
-      message: "Leave created successfully",
+      message: "Leave applied successfully",
       data: res,
     };
   } catch (err: any) {
@@ -49,8 +49,6 @@ const create = async (connection: any, details: any) => {
       message: "Failed to create leave",
       error: err.message,
     };
-  } finally {
-    connection.release();
   }
 
   return result;
@@ -88,8 +86,6 @@ const findLeave = async (
       message: "Failed to get leave",
       error: err.message,
     };
-  } finally {
-    connection.release();
   }
 
   return result;
